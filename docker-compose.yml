@@ -1,0 +1,15 @@
+version: "3.4"
+
+services:
+  db:
+    platform: linux/amd64
+    image: postgres:15.0
+    volumes:
+      - ./dbdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: markdown_app
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
+    restart: always
