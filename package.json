@@ -6,11 +6,13 @@
     "dev": "next dev",
     "db:dev:start": "docker-compose up",
     "db:dev:stop": "docker-compose down",
+    "seed": "tsx ./scripts/seed.ts",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/env": "^14.0.3",
     "bcrypt": "^5.1.1",
     "next": "14.0.3",
     "pg": "^8.11.3",
@@ -19,7 +21,9 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.3.1",
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
+    "@types/pg": "^8.10.9",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
