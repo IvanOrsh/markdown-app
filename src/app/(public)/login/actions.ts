@@ -62,10 +62,15 @@ export async function login(prevState: LoginFormState, formData: FormData) {
       .setExpirationTime("2w")
       .sign(new TextEncoder().encode(config.JWT_SECRET));
 
+    // set expiration on the cookie
+    const oneDay = 24 * 60 * 60 * 1000;
+    const twoWeeks = 14 * oneDay;
+
     cookies().set("jwt-token", token, {
       sameSite: "strict",
       httpOnly: true,
       secure: true,
+      expires: Date.now() + twoWeeks,
     });
 
     redirect("/dashboard");
