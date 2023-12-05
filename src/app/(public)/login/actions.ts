@@ -14,7 +14,7 @@ const LoginSchema = z.object({
   password: z.string().min(6),
 });
 
-export type State = {
+export type LoginFormState = {
   errors?: {
     username?: string[];
     password?: string[];
@@ -23,7 +23,7 @@ export type State = {
   message?: string | null;
 };
 
-export async function login(prevState: State, formData: FormData) {
+export async function login(prevState: LoginFormState, formData: FormData) {
   const validatedFields = LoginSchema.safeParse({
     username: formData.get("username"),
     password: formData.get("password"),

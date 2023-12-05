@@ -2,10 +2,10 @@
 
 import { useFormState } from "react-dom";
 
-import { type State, login } from "./actions";
+import { type LoginFormState, login } from "./actions";
 
 export default function LoginForm() {
-  const initialState: State = {
+  const initialState: LoginFormState = {
     errors: {},
     message: null,
   };
