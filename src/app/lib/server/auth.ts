@@ -13,7 +13,7 @@ export async function getJWTPayload() {
   return payload;
 }
 
-export async function getCurrentuser() {
+export async function getCurrentUser() {
   const payload = await getJWTPayload();
   const userRes = await sql("select * from users where id = $1", [payload.sub]);
 
