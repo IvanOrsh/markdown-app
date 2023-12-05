@@ -15,16 +15,17 @@ const SignUpSchema = z.object({
   confirmPassword: z.string().min(6),
 });
 
-export type State = {
+export type SignUpFormState = {
   errors?: {
-    username?: string;
-    password?: string;
-    confirmPassword?: string;
+    username?: string[];
+    password?: string[];
+    confirmPassword?: string[];
   };
-  message?: string;
+
+  message?: string | null;
 };
 
-export async function signup(prevState: State, formData: FormData) {
+export async function signup(prevState: SignUpFormState, formData: FormData) {
   const validatedFields = SignUpSchema.safeParse({
     username: formData.get("username"),
     password: formData.get("password"),
@@ -33,8 +34,8 @@ export async function signup(prevState: State, formData: FormData) {
 
   if (!validatedFields.success) {
     return {
-      errors: validatedFields.error.formErrors.fieldErrors,
-      message: "Sign up error",
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Sign error",
     };
   }
 
@@ -45,7 +46,7 @@ export async function signup(prevState: State, formData: FormData) {
   if (password !== confirmPassword) {
     return {
       errors: {
-        confirmPassword: "Password and Confirm Password must match",
+        confirmPassword: ["Password and Confirm Password must match"],
       },
       message: "Sign up error",
     };
@@ -59,7 +60,7 @@ export async function signup(prevState: State, formData: FormData) {
   if (userRes.rowCount && userRes.rowCount > 0) {
     return {
       errors: {
-        username: "Username already exists",
+        username: ["Username already exists"],
       },
       message: "Sign up error",
     };
@@ -69,7 +70,7 @@ export async function signup(prevState: State, formData: FormData) {
   const hash = await bcrypt.hash(password?.toString()!, saltRounds);
 
   const insertRes = await sql(
-    "insert into users (username, password) values ($1, $2) return *",
+    "insert into users (username, password) values ($1, $2) returning *",
     [username, hash]
   );
 
