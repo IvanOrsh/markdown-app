@@ -45,7 +45,7 @@ export default function LoginForm() {
             Password
           </label>
           <input
-            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded focus:ring-green-600 focus:border-green-600 block w-full p-2.5"
+            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded focus:ring-green-600 focus:border- block w-full p-2.5"
             type="password"
             name="password"
             id="password"
@@ -58,7 +58,7 @@ export default function LoginForm() {
         </div>
 
         <button
-          className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline tr"
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-black transition-colors duration-300 "
           type="submit"
         >
           Submit

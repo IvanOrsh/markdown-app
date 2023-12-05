@@ -80,7 +80,7 @@ export default function SignUpForm() {
         </div>
 
         <button
-          className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline tr"
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-black transition-colors duration-300 "
           type="submit"
         >
           Submit
