@@ -1,4 +1,4 @@
-import { Client } from "pg";
+import { Client, QueryResult } from "pg";
 
 import config from "./config";
 
@@ -8,4 +8,18 @@ export function getClient(): Client {
   });
 
   return client;
+}
+
+export async function sql(
+  sql: string,
+  values?: any[]
+): Promise<QueryResult<any>> {
+  const client = getClient();
+
+  await client.connect();
+  const res = await client.query(sql, values);
+
+  await client.end();
+
+  return res;
 }
