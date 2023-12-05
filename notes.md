@@ -75,3 +75,14 @@ create table notes (
 );
 
 ```
+
+## 6. Notes Context
+
+```txt
+
+				Dashboard - notes context (to store notes state)
+				/       \
+		Sidebar   Notes List
+     |						|
+Notes List    Markdown Editor
+```
