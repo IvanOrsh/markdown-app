@@ -1,10 +1,22 @@
 "use client";
 
+import { useFormState } from "react-dom";
+
+import { type State, login } from "./actions";
+
 export default function LoginForm() {
+  const initialState: State = {
+    errors: {},
+    message: null,
+  };
+  const [state, dispatch] = useFormState(login, initialState);
+
   return (
-    <div className="p-8 border-2 space-y-4">
-      <h1 className="text-2xl">Log In</h1>
-      <form action="" className="space-y-4">
+    <div className="p-8 border-2 space-y-4 min-w-[400px]">
+      <h1 className="text-2xl bg-gray-800 p-2 font-bold text-center text-white">
+        Log In
+      </h1>
+      <form action={dispatch} className="space-y-4">
         <div>
           <label
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
@@ -18,6 +30,11 @@ export default function LoginForm() {
             name="username"
             id="username"
           />
+          {state?.errors?.username?.map((error) => (
+            <p className="text-red-500" key={error}>
+              {error}
+            </p>
+          ))}
         </div>
 
         <div>
@@ -33,14 +50,20 @@ export default function LoginForm() {
             name="password"
             id="password"
           />
+          {state?.errors?.password?.map((error) => (
+            <p className="text-red-500" key={error}>
+              {error}
+            </p>
+          ))}
         </div>
 
         <button
-          className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline tr"
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline tr"
           type="submit"
         >
           Submit
         </button>
+        {state?.message && <p className="text-red-500">{state.message}</p>}
       </form>
     </div>
   );

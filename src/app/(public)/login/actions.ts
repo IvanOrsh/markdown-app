@@ -14,10 +14,10 @@ const LoginSchema = z.object({
   password: z.string().min(6),
 });
 
-type State = {
+export type State = {
   errors?: {
-    username?: string;
-    password?: string;
+    username?: string[];
+    password?: string[];
   };
 
   message?: string | null;
