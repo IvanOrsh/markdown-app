@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useNotesDispatch, useNotesState } from "../contexts/notex-context";
 import { fetchNotes } from "../lib/client/api";
+import NoteList from "./note-list";
 
 export default function NoteContainer() {
   const state = useNotesState();
@@ -29,5 +30,9 @@ export default function NoteContainer() {
     );
   }
 
-  return <div className="w-full">{state.rootNotes.length}</div>;
+  return (
+    <div className="w-full">
+      <NoteList notes={state.rootNotes} />
+    </div>
+  );
 }
