@@ -1,7 +1,5 @@
-import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 
-import config from "@/app/lib/server/config";
 import { jwtVerify } from "jose";
 
 export async function middleware(request: NextRequest) {
