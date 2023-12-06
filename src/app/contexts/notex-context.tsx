@@ -12,10 +12,20 @@ interface NotesState {
   rootNotes: NoteData[];
 }
 
+function setRootNotes(state: NotesState, action: any) {
+  return {
+    ...state,
+    rootNotes: action.payload,
+  };
+}
+
 function reducer(state: NotesState, action: any) {
   console.log(state, action);
 
   switch (action.type) {
+    case "set_root_notes":
+      return setRootNotes(state, action);
+
     default:
       return state;
   }
