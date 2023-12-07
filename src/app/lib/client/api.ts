@@ -1,6 +1,16 @@
 import { DateTime } from "luxon";
 import { type NoteData } from "./types";
 
+export async function createNote() {
+  const res = await fetch("/api/notes", {
+    method: "POST",
+  });
+
+  const json = await res.json();
+
+  return transformJsonToNote(json);
+}
+
 export async function fetchNotes(parent_id?: string) {
   let queryString = "";
 
