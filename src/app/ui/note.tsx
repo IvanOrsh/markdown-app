@@ -1,5 +1,6 @@
-import { DateTime } from "luxon";
 import { useState } from "react";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { DateTime } from "luxon";
 import clsx from "clsx";
 
 import { NoteData } from "../lib/client/types";
@@ -13,9 +14,22 @@ type NoteProps = {
 };
 
 export default function Note({ note, depth }: NoteProps) {
+  const searchParams = useSearchParams();
+  const { replace } = useRouter();
+  const pathname = usePathname();
+
   const state = useNotesState();
   const dispatch = useNotesDispatch();
+
   const [isTarget, setIsTarget] = useState(false);
+
+  function handleClick(e: React.MouseEvent, id: string) {
+    e.stopPropagation();
+    console.log(id);
+    const params = new URLSearchParams(searchParams);
+    params.set("note_id", id);
+    replace(`${pathname}?${params.toString()}`);
+  }
 
   function handleDragStart(e: React.DragEvent) {
     console.log("drag start");
@@ -134,6 +148,7 @@ export default function Note({ note, depth }: NoteProps) {
         onDragOver={handleDragOver}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
+        onClick={(e) => handleClick(e, note.id)}
         className={clsx(
           "p-2  text-black border-2 hover:outline hover:outline-2 hover:outline-black rounded cursor-pointer space-y-2",
           {
