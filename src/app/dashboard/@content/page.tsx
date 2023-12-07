@@ -26,6 +26,8 @@ import { useNotesDispatch } from "@/app/contexts/notes-context";
 import "ace-builds/src-noconflict/mode-markdown";
 import "ace-builds/src-min-noconflict/theme-github";
 
+import style from "./markdown-styles.module.css";
+
 SyntaxHighlighter.registerLanguage("tsx", tsx);
 SyntaxHighlighter.registerLanguage("typescript", typescript);
 SyntaxHighlighter.registerLanguage("scss", scss);
@@ -147,7 +149,7 @@ export default function Page() {
           </div>
 
           {/* markdown editor */}
-          <div className="flex flex-col xl:flex-row">
+          <div className="flex flex-col gap-y-4 xl:flex-row xl:gap-x-2">
             {/* editor */}
             <div className="flex-1 ">
               <AceEditor
@@ -157,6 +159,7 @@ export default function Page() {
                 onChange={handleMarkdownChange}
                 value={curNote.content}
                 width="100%"
+                height="50vh"
                 wrapEnabled={true}
                 fontSize="22px"
               />
@@ -165,6 +168,7 @@ export default function Page() {
             {/* TODO: extract to a separate component */}
             <div className="flex-1">
               <ReactMarkdown
+                className={style.reactMarkdown}
                 components={MarkdownComponents}
                 remarkPlugins={[
                   [remarkGfm, { singleTilde: false, tablePipe: true }],
