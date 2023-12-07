@@ -5,10 +5,18 @@ import { useNotesDispatch, useNotesState } from "../contexts/notex-context";
 import { fetchNotes } from "../lib/client/api";
 import NoteList from "./note-list";
 import CreateNoteBtn from "./create-note-btn";
+import SortSelect from "./sort-select";
 
 export default function NoteContainer() {
   const state = useNotesState();
   const dispatch = useNotesDispatch();
+
+  function handleChange(value: string) {
+    dispatch({
+      type: "sort_notes",
+      sortKey: value,
+    });
+  }
 
   useEffect(() => {
     async function init() {
@@ -32,8 +40,9 @@ export default function NoteContainer() {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full space-y-2">
       <CreateNoteBtn />
+      <SortSelect onChange={handleChange} />
       <NoteList notes={state.rootNotes} />
     </div>
   );
