@@ -84,18 +84,51 @@ function updateCurrentDragId(state: NotesState, action: any) {
 
 function changeParent(state: NotesState, action: any) {
   //  get currently dragging note
+  const { currentDragId, newParentId } = action;
+  const currentDraggingNote = state.notesMap.get(currentDragId);
+
+  if (!currentDraggingNote) {
+    return state;
+  }
 
   // get old parent
+  const oldParentId = currentDraggingNote.parent_id;
+  const oldParent = state.notesMap.get(oldParentId);
 
   // get new parent
+  const newParent = state.notesMap.get(newParentId);
 
-  // remove the currently dragging note from old parent
+  if (!newParent) {
+    return state;
+  }
+
+  const newState = {
+    ...state,
+  };
+
+  // remove the currently dragging note from old parent or root notes:
+
+  if (oldParent) {
+    // #1
+    oldParent.child_notes.splice(
+      oldParent.child_notes.findIndex((note) => note.id === currentDragId),
+      1
+    );
+  } else {
+    // 2
+    // since it has no old parent, remove it from root notes
+    // delete from root notes
+    newState.rootNotes.splice(
+      newState.rootNotes.findIndex((note) => note.id === currentDragId),
+      1
+    );
+  }
 
   // add the currently dragging note to new parent
+  newParent.child_notes.push(currentDraggingNote);
 
   // return new State
-
-  return state;
+  return newState;
 }
 
 function reducer(state: NotesState, action: any) {
