@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 
 import { NoteData } from "../lib/client/types";
 import { useNotesDispatch, useNotesState } from "../contexts/notes-context";
-import { updateParent } from "../lib/client/api";
+import { fetchNotes, updateParent } from "../lib/client/api";
 import NoteList from "./note-list";
 
 type NoteProps = {
@@ -93,6 +93,15 @@ export default function Note({ note, depth }: NoteProps) {
     console.log("drag leave");
   }
 
+  async function handleExpand(e: React.MouseEvent) {
+    const childNotes = await fetchNotes(note.id);
+    dispatch({
+      type: "add_child_notes_to_note",
+      payload: childNotes,
+      id: note.id,
+    });
+  }
+
   return (
     <div>
       <article
@@ -103,15 +112,13 @@ export default function Note({ note, depth }: NoteProps) {
         onDragOver={handleDragOver}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
-        className="p-2 bg-white text-black border-2 hover:outline hover:outline-2 hover:outline-black rounded group  cursor-pointer space-y-2"
+        className="p-2 bg-white text-black border-2 hover:outline hover:outline-2 hover:outline-black rounded cursor-pointer space-y-2"
       >
-        <h2 className="text-xl font-bold line-clamp-1 group-hover:line-clamp-none ">
-          {note.title}
-        </h2>
-        <p className="hidden group-hover:block text-sm text-gray-500 dark:text-gray-300">
+        <h2 className="text-xl font-bold">{note.title}</h2>
+        <p className="text-sm text-gray-500 dark:text-gray-300">
           id: {note.id}
         </p>
-        <p className="hidden group-hover:block">
+        <p>
           <span className="font-bold text-gray-500 dark:text-gray-300 text-sm mr-2">
             created:
           </span>
@@ -130,6 +137,15 @@ export default function Note({ note, depth }: NoteProps) {
           {note.is_published ? "Published" : "Draft"}
         </p>
       </article>
+
+      {note.child_count > 0 && (
+        <button
+          onClick={handleExpand}
+          className="bg-gray-100 text-gray-600 dark:text-gray-300 border border-gray-700 text-sm font-bold px-2 py-1 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 rounded"
+        >
+          expand
+        </button>
+      )}
 
       {note.child_notes?.length > 0 && (
         <NoteList notes={note.child_notes} depth={depth + 1} />

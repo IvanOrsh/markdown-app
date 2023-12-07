@@ -134,6 +134,22 @@ function changeParent(state: NotesState, action: any) {
   return newState;
 }
 
+function addChildNotesToNote(state: NotesState, action: any) {
+  addNotesToCache(state.notesMap, action.payload);
+
+  const newState = {
+    ...state,
+  };
+
+  const note = newState.notesMap.get(action.id);
+
+  if (note) {
+    note.child_notes = action.payload;
+  }
+
+  return newState;
+}
+
 function reducer(state: NotesState, action: any) {
   console.log(state, action);
 
@@ -152,6 +168,9 @@ function reducer(state: NotesState, action: any) {
 
     case "change_parent":
       return changeParent(state, action);
+
+    case "add_child_notes_to_note":
+      return addChildNotesToNote(state, action);
 
     default:
       return state;
