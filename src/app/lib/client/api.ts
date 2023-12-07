@@ -20,6 +20,13 @@ export async function createNote() {
   return transformJsonToNote(json);
 }
 
+export async function fetchNote(note_id: string) {
+  const noteRes = await fetch(`/api/notes/${note_id}`);
+  const json = await noteRes.json();
+
+  return transformJsonToNote(json);
+}
+
 export async function fetchNotes(parent_id?: string) {
   let queryString = "";
 
