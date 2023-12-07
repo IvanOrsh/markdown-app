@@ -1,4 +1,6 @@
 import { DateTime } from "luxon";
+import { useState } from "react";
+import clsx from "clsx";
 
 import { NoteData } from "../lib/client/types";
 import { useNotesDispatch, useNotesState } from "../contexts/notes-context";
@@ -13,6 +15,7 @@ type NoteProps = {
 export default function Note({ note, depth }: NoteProps) {
   const state = useNotesState();
   const dispatch = useNotesDispatch();
+  const [isTarget, setIsTarget] = useState(false);
 
   function handleDragStart(e: React.DragEvent) {
     console.log("drag start");
@@ -25,12 +28,14 @@ export default function Note({ note, depth }: NoteProps) {
 
   function handleDragEnd(e: React.DragEvent) {
     console.log("drag end");
+    setIsTarget(false);
   }
 
   async function handleDrop(e: React.DragEvent) {
     console.log("drop", note.id);
     // #3
     console.log("current drag id:", state.currentDragId);
+    setIsTarget(false);
 
     // make sure we are not dropping node to itself
     if (note.id === state.currentDragId) {
@@ -67,11 +72,21 @@ export default function Note({ note, depth }: NoteProps) {
   }
 
   function handleDragEnter(e: React.DragEvent) {
+    e.stopPropagation();
     console.log("drag enter");
+    if (e.currentTarget === e.relatedTarget) {
+      setIsTarget(true);
+    }
   }
 
   function handleDragLeave(e: React.DragEvent) {
+    e.stopPropagation();
     console.log("drag leave");
+
+    // @ts-ignore
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setIsTarget(false);
+    }
   }
 
   async function handleExpand(e: React.MouseEvent) {
@@ -119,7 +134,13 @@ export default function Note({ note, depth }: NoteProps) {
         onDragOver={handleDragOver}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
-        className="p-2 bg-white text-black border-2 hover:outline hover:outline-2 hover:outline-black rounded cursor-pointer space-y-2"
+        className={clsx(
+          "p-2  text-black border-2 hover:outline hover:outline-2 hover:outline-black rounded cursor-pointer space-y-2",
+          {
+            "bg-green-200": isTarget,
+            "bg-white": !isTarget,
+          }
+        )}
       >
         <h2 className="text-xl font-bold">{note.title}</h2>
         <p className="text-sm text-gray-500 dark:text-gray-300">
