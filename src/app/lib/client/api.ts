@@ -1,6 +1,15 @@
 import { DateTime } from "luxon";
 import { type NoteData } from "./types";
 
+export async function updateParent(currentDragId: string, newParentId: string) {
+  await fetch(`/api/notes/${currentDragId}/update_parent`, {
+    method: "POST",
+    body: JSON.stringify({
+      parent_id: newParentId,
+    }),
+  });
+}
+
 export async function createNote() {
   const res = await fetch("/api/notes", {
     method: "POST",
