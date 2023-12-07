@@ -10,24 +10,6 @@ type NoteProps = {
   depth: number;
 };
 
-function isIdInChildNotes(note: NoteData, id: string): boolean {
-  if (note.child_notes.length === 0) {
-    return false;
-  }
-
-  for (const childNote of note.child_notes) {
-    if (childNote.id === id) {
-      return true;
-    }
-
-    if (isIdInChildNotes(childNote, id)) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
 export default function Note({ note, depth }: NoteProps) {
   const state = useNotesState();
   const dispatch = useNotesDispatch();
@@ -56,18 +38,17 @@ export default function Note({ note, depth }: NoteProps) {
       return;
     }
 
-    const currentDraggingNote = state.notesMap.get(state.currentDragId!);
-
-    // if currently dragging note is root note, it cannot be child of its own children
-    if (
-      state.rootNotes.find((note) => note.id === state.currentDragId) &&
-      isIdInChildNotes(currentDraggingNote!, note.id)
-    ) {
-      alert("Root node cannot be a child of its own children");
-      return state;
-    }
-
     // TODO: check if target note is descendent of current dragging note
+    if (
+      checkIfNoteIsDescendent(
+        state.notesMap,
+        state.notesMap.get(note.id)!,
+        state.notesMap.get(state.currentDragId!)!
+      )
+    ) {
+      alert("invalid action. cannot move note into descendent note.");
+      return;
+    }
 
     // update parent api call
     await updateParent(state.currentDragId!, note.id);
@@ -100,6 +81,32 @@ export default function Note({ note, depth }: NoteProps) {
       payload: childNotes,
       id: note.id,
     });
+  }
+
+  /**
+   * Checks if a given note is a descendant of another note.
+   *
+   * @param {Map<string, NoteData>} notesMap - The map containing all notes.
+   * @param {NoteData} noteA - The note to check if it is a descendant.
+   * @param {NoteData} noteB - The potential ancestor note.
+   * @return {boolean} Returns true if noteA is a descendant of noteB, otherwise returns false.
+   */
+  function checkIfNoteIsDescendent(
+    notesMap: Map<string, NoteData>,
+    noteA: NoteData,
+    noteB: NoteData
+  ) {
+    let curNote = noteA;
+
+    while (curNote.parent_id) {
+      curNote = notesMap.get(curNote.parent_id)!;
+
+      if (curNote.id === noteB.id) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   return (
