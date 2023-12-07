@@ -10,6 +10,7 @@ import { type NoteData } from "../lib/client/types";
 
 interface NotesState {
   rootNotes: NoteData[];
+  currentDragId: string | null;
 }
 
 function setRootNotes(state: NotesState, action: any) {
@@ -64,6 +65,13 @@ function sortNotesRecursively(notes: NoteData[], sortKey: any) {
   }
 }
 
+function updateCurrentDragId(state: NotesState, action: any) {
+  return {
+    ...state,
+    currentDragId: action.payload,
+  };
+}
+
 function reducer(state: NotesState, action: any) {
   console.log(state, action);
 
@@ -77,6 +85,9 @@ function reducer(state: NotesState, action: any) {
     case "sort_notes":
       return sortNotes(state, action);
 
+    case "update_current_drag_id":
+      return updateCurrentDragId(state, action);
+
     default:
       return state;
   }
@@ -84,6 +95,7 @@ function reducer(state: NotesState, action: any) {
 
 const initialState: NotesState = {
   rootNotes: [],
+  currentDragId: null,
 };
 
 export const NotesContext = createContext({} as NotesState);
