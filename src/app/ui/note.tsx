@@ -10,6 +10,24 @@ type NoteProps = {
   depth: number;
 };
 
+function isIdInChildNotes(note: NoteData, id: string): boolean {
+  if (note.child_notes.length === 0) {
+    return false;
+  }
+
+  for (const childNote of note.child_notes) {
+    if (childNote.id === id) {
+      return true;
+    }
+
+    if (isIdInChildNotes(childNote, id)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 export default function Note({ note, depth }: NoteProps) {
   const state = useNotesState();
   const dispatch = useNotesDispatch();
@@ -36,6 +54,17 @@ export default function Note({ note, depth }: NoteProps) {
     if (note.id === state.currentDragId) {
       alert("cannot move note into itself");
       return;
+    }
+
+    const currentDraggingNote = state.notesMap.get(state.currentDragId!);
+
+    // if currently dragging note is root note, it cannot be child of its own children
+    if (
+      state.rootNotes.find((note) => note.id === state.currentDragId) &&
+      isIdInChildNotes(currentDraggingNote!, note.id)
+    ) {
+      alert("Root node cannot be a child of its own children");
+      return state;
     }
 
     // TODO: check if target note is descendent of current dragging note

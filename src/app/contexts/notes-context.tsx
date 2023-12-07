@@ -127,6 +127,9 @@ function changeParent(state: NotesState, action: any) {
   // add the currently dragging note to new parent
   newParent.child_notes.push(currentDraggingNote);
 
+  // set parent id of current dragging note
+  currentDraggingNote.parent_id = newParentId;
+
   // return new State
   return newState;
 }
