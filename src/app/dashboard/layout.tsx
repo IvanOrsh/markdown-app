@@ -1,6 +1,6 @@
 "use client";
 
-import { NotesProvider } from "../contexts/notex-context";
+import { NotesProvider } from "../contexts/notes-context";
 
 export default function Layout(props: {
   sidebar: React.ReactNode;

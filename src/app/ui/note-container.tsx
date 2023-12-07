@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useNotesDispatch, useNotesState } from "../contexts/notex-context";
+import { useNotesDispatch, useNotesState } from "../contexts/notes-context";
 import { fetchNotes } from "../lib/client/api";
 import NoteList from "./note-list";
 import CreateNoteBtn from "./create-note-btn";

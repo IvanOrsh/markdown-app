@@ -1,4 +1,4 @@
-import { useNotesDispatch } from "../contexts/notex-context";
+import { useNotesDispatch } from "../contexts/notes-context";
 import { createNote } from "../lib/client/api";
 
 export default function CreateNoteBtn() {
