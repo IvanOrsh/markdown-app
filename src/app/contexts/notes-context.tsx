@@ -11,9 +11,18 @@ import { type NoteData } from "../lib/client/types";
 interface NotesState {
   rootNotes: NoteData[];
   currentDragId: string | null;
+  notesMap: Map<string, NoteData>;
+}
+
+function addNotesToCache(notesMap: Map<string, NoteData>, notes: NoteData[]) {
+  for (const note of notes) {
+    notesMap.set(note.id, note);
+  }
 }
 
 function setRootNotes(state: NotesState, action: any) {
+  addNotesToCache(state.notesMap, action.payload);
+
   return {
     ...state,
     rootNotes: action.payload,
@@ -21,6 +30,7 @@ function setRootNotes(state: NotesState, action: any) {
 }
 
 function addNewNoteToRootNotes(state: NotesState, action: any) {
+  addNotesToCache(state.notesMap, [action.payload]);
   const newRootNotes = [...state.rootNotes];
   newRootNotes.unshift(action.payload);
 
@@ -72,6 +82,22 @@ function updateCurrentDragId(state: NotesState, action: any) {
   };
 }
 
+function changeParent(state: NotesState, action: any) {
+  //  get currently dragging note
+
+  // get old parent
+
+  // get new parent
+
+  // remove the currently dragging note from old parent
+
+  // add the currently dragging note to new parent
+
+  // return new State
+
+  return state;
+}
+
 function reducer(state: NotesState, action: any) {
   console.log(state, action);
 
@@ -88,6 +114,9 @@ function reducer(state: NotesState, action: any) {
     case "update_current_drag_id":
       return updateCurrentDragId(state, action);
 
+    case "change_parent":
+      return changeParent(state, action);
+
     default:
       return state;
   }
@@ -96,6 +125,7 @@ function reducer(state: NotesState, action: any) {
 const initialState: NotesState = {
   rootNotes: [],
   currentDragId: null,
+  notesMap: new Map<string, NoteData>(),
 };
 
 export const NotesContext = createContext({} as NotesState);
