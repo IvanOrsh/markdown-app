@@ -150,6 +150,20 @@ function addChildNotesToNote(state: NotesState, action: any) {
   return newState;
 }
 
+function updateNote(state: NotesState, action: any) {
+  const newState = {
+    ...state,
+  };
+  const note = newState.notesMap.get(action.payload.id);
+
+  if (!note) {
+    return newState;
+  }
+
+  Object.assign(note, action.payload);
+  return newState;
+}
+
 function reducer(state: NotesState, action: any) {
   console.log(state, action);
 
@@ -171,6 +185,9 @@ function reducer(state: NotesState, action: any) {
 
     case "add_child_notes_to_note":
       return addChildNotesToNote(state, action);
+
+    case "update_note":
+      return updateNote(state, action);
 
     default:
       return state;

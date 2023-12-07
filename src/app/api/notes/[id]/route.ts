@@ -24,15 +24,10 @@ export async function PUT(
   const validateFields = UpdateNoteSchema.safeParse(body);
 
   if (!validateFields.success) {
-    return NextResponse.json(
-      {
-        errors: validateFields.error.flatten().fieldErrors,
-        message: "update note error",
-      },
-      {
-        status: 400,
-      }
-    );
+    return NextResponse.json({
+      errors: validateFields.error.flatten().fieldErrors,
+      message: "update note error",
+    });
   }
 
   const { data } = validateFields;
