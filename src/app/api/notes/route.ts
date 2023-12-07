@@ -1,6 +1,7 @@
-import { getCurrentUser } from "@/app/lib/server/auth";
-import { sql } from "@/app/lib/server/db";
 import { NextResponse } from "next/server";
+
+import { sql } from "@/app/lib/server/db";
+import { getCurrentUser } from "@/app/lib/server/auth";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -49,4 +50,14 @@ export async function GET(request: Request) {
   }
 
   return NextResponse.json(notesRes.rows);
+}
+
+export async function POST(request: Request) {
+  const user = await getCurrentUser();
+  const noteRes = await sql(
+    "insert into notes (title, user_id) values ('Untitled', $1) returning *",
+    [user.id]
+  );
+
+  return NextResponse.json(noteRes.rows[0]);
 }
