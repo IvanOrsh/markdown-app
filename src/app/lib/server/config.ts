@@ -6,6 +6,7 @@ loadEnvConfig(projectDir);
 const config = {
   DATABASE_URL: process.env.DATABASE_URL,
   JWT_SECRET: process.env.JWT_SECRET,
+  ENV: process.env.ENV || "development",
 };
 
 export default config;
