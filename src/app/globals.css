@@ -30,3 +30,11 @@ body {
   position: absolute;
   width: 1px;
 }
+
+@layer utilities {
+  .truncate-title {
+    @apply overflow-hidden text-ellipsis;
+    max-width: 300px;
+    white-space: nowrap;
+  }
+}
