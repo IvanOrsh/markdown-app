@@ -165,13 +165,13 @@ export default function Page() {
             {/* editor */}
             <div className="flex-1 ">
               <AceEditor
+                className="xl:min-h-[85vh] min-h-[60vh]"
                 mode="markdown"
                 theme="github"
                 name="markdown-editor"
                 onChange={handleMarkdownChange}
                 value={curNote.content}
                 width="100%"
-                height="60vh"
                 wrapEnabled={true}
                 fontSize="22px"
               />
