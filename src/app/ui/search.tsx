@@ -28,7 +28,7 @@ export default function Search() {
   }
 
   return (
-    <div className="flex items-center justify-center w-full max-w-3xl rounded-full bg-white border border-gray-200 px-3 py-2 shadow-sm">
+    <div className="flex items-center justify-center rounded-full bg-white border border-gray-200 px-3 py-2 shadow-sm">
       <svg
         className="w-4 h-4 mr-2 text-gray-500"
         xmlns="http://www.w3.org/2000/svg"
