@@ -34,28 +34,36 @@ export default async function Page({
 
       <Search />
 
-      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {notes.map((note) => (
-          <li
-            key={note.id}
-            className="hover:outline hover:outline-2 hover:outline-green-700 hover:cursor-pointer p-2 bg-white rounded-lg shadow-md"
-          >
-            <Link href={`/published/${note.id}`}>
-              <h3 className="text-xl font-bold py-2 truncate-title text-gray-700">
-                {note.title}
-              </h3>
-              <p className="text-sm text-gray-600">
-                Created:{" "}
+      <table className="w-full">
+        <caption className="sr-only">Published Notes</caption>
+        <thead className="border-b border-gray-500">
+          <tr className="text-left text-sm text-gray-600 font-bold py-2">
+            <th>Title</th>
+            <th>Created</th>
+            <th>Updated</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-400 divide-solid text-md">
+          {notes.map((note) => (
+            <tr key={note.id}>
+              <td>
+                <Link
+                  className="block hover:outline hover:outline-2 hover:outline-green-700 hover:cursor-pointer p-2 bg-gray-100/10 rounded-md "
+                  href={`/published/${note.id}`}
+                >
+                  {note.title}
+                </Link>
+              </td>
+              <td className="py-2">
                 {note.created_at.toLocaleString(DateTime.DATETIME_SHORT)}
-              </p>
-              <p className="text-sm text-gray-600">
-                Updated:{" "}
+              </td>
+              <td className="py-2">
                 {note.updated_at.toLocaleString(DateTime.DATETIME_SHORT)}
-              </p>
-            </Link>
-          </li>
-        ))}
-      </ul>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </article>
   );
 }
