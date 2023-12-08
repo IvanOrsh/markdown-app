@@ -5,7 +5,6 @@ import config from "./config";
 export function getClient(): Client {
   let sslmode = "";
 
-  console.log(config.ENV);
   if (config.ENV === "production") {
     sslmode = "?sslmode=require";
   }
