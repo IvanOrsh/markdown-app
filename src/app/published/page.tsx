@@ -3,14 +3,43 @@ import { DateTime } from "luxon";
 
 import { sql } from "../lib/server/db";
 import Search from "../ui/search";
+import SortSelectServer from "../ui/sort-select-server";
 
-async function getNotes(query?: string) {
+async function getNotes(query?: string, sort?: string) {
   let sqlStr = "select * from notes where is_published = true";
   let values = [];
 
   if (query !== undefined) {
     sqlStr += " and title ilike $1";
     values.push(`%${query}%`);
+  }
+
+  if (sort !== undefined) {
+    switch (sort) {
+      case "title":
+        sqlStr += " order by title asc";
+        break;
+      case "-title":
+        sqlStr += " order by title desc";
+        break;
+      case "created":
+        sqlStr += " order by created_at asc";
+        break;
+      case "-created":
+        sqlStr += " order by created_at desc";
+        break;
+      case "updated":
+        sqlStr += " order by updated_at asc";
+        break;
+      case "-updated":
+        sqlStr += " order by updated_at desc";
+        break;
+      default:
+        sqlStr += " order by created_at desc";
+        break;
+    }
+  } else {
+    sqlStr += " order by title asc";
   }
 
   const notesRes = await sql(sqlStr, values);
@@ -21,10 +50,11 @@ async function getNotes(query?: string) {
 export default async function Page({
   searchParams,
 }: {
-  searchParams?: { query?: string };
+  searchParams?: { query?: string; sort?: string };
 }) {
   const query = searchParams?.query;
-  const notes = await getNotes(query);
+  const sort = searchParams?.sort;
+  const notes = await getNotes(query, sort);
 
   return (
     <article className="container mx-auto px-4 py-8 space-y-4">
@@ -32,7 +62,10 @@ export default async function Page({
         Published Notes:
       </h2>
 
-      <Search />
+      <div className="flex flex-col md:flex-row items-start gap-2">
+        <Search />
+        <SortSelectServer />
+      </div>
 
       <table className="w-full">
         <caption className="sr-only">Published Notes</caption>
