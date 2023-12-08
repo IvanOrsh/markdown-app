@@ -2,22 +2,38 @@ import Link from "next/link";
 import { DateTime } from "luxon";
 
 import { sql } from "../lib/server/db";
+import Search from "../ui/search";
 
-async function getNotes() {
+async function getNotes(query?: string) {
   let sqlStr = "select * from notes where is_published = true";
-  const notesRes = await sql(sqlStr);
+  let values = [];
+
+  if (query !== undefined) {
+    sqlStr += " and title ilike $1";
+    values.push(`%${query}%`);
+  }
+
+  const notesRes = await sql(sqlStr, values);
 
   return notesRes.rows;
 }
 
-export default async function Page() {
-  const notes = await getNotes();
+export default async function Page({
+  searchParams,
+}: {
+  searchParams?: { query?: string };
+}) {
+  const query = searchParams?.query;
+  const notes = await getNotes(query);
 
   return (
-    <article className="container mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold mb-4 text-green-700 bg-white p-2 rounded">
+    <article className="container mx-auto px-4 py-8 space-y-4">
+      <h2 className="text-2xl font-bold mb-4 text-green-700">
         Published Notes:
       </h2>
+
+      <Search />
+
       <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {notes.map((note) => (
           <li
