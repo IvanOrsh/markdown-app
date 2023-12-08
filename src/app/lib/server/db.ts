@@ -10,7 +10,7 @@ export function getClient(): Client {
   }
 
   const client = new Client({
-    connectionString: config.DATABASE_URL + sslmode,
+    connectionString: config.POSTGRES_URL + sslmode,
   });
 
   return client;
