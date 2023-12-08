@@ -77,6 +77,17 @@ export default function Page() {
     await handleUpdateNote(newNote);
   }
 
+  async function handlePublish() {
+    const newNote = {
+      ...curNote!,
+      is_published: !curNote?.is_published,
+    };
+
+    setCurNote(newNote);
+
+    await handleUpdateNote(newNote);
+  }
+
   useEffect(() => {
     console.log(searchParams);
     const note_id = searchParams.get("note_id");
@@ -87,6 +98,7 @@ export default function Page() {
     }
   }, [searchParams, curNote]);
 
+  // TODO: extract MarkdownComponents to a separate file
   const MarkdownComponents: object = {
     code({ node, inline, className, ...props }: SyntaxHighlighterProps) {
       const hasLang = /language-(\w+)/.exec(className || "");
@@ -130,8 +142,8 @@ export default function Page() {
   return (
     <div className="flex-auto w-2/3">
       {curNote && (
-        <div className="p-2 w-full space-y-2">
-          <div>
+        <div className="p-2 w-full divide-y-8 divide-gray-300 dark:divide-gray-700">
+          <div className="py-2">
             <label
               htmlFor="title"
               className="text-gray-500 dark:text-gray-300 font-bold text-sm"
@@ -149,7 +161,7 @@ export default function Page() {
           </div>
 
           {/* markdown editor */}
-          <div className="flex flex-col gap-y-4 xl:flex-row xl:gap-x-2">
+          <div className="py-2 flex flex-col gap-y-4 xl:flex-row xl:gap-x-2">
             {/* editor */}
             <div className="flex-1 ">
               <AceEditor
@@ -159,7 +171,7 @@ export default function Page() {
                 onChange={handleMarkdownChange}
                 value={curNote.content}
                 width="100%"
-                height="50vh"
+                height="60vh"
                 wrapEnabled={true}
                 fontSize="22px"
               />
@@ -177,6 +189,21 @@ export default function Page() {
                 {curNote.content}
               </ReactMarkdown>
             </div>
+          </div>
+
+          {/* checkbox: is_published */}
+          <div className="py-2 flex flex-row gap-4 items-center">
+            <label htmlFor="is_published" className="inline-flex items-center">
+              <span className="mr-2 text-gray-800">Published</span>
+              <input
+                checked={curNote.is_published}
+                onChange={handlePublish}
+                type="checkbox"
+                id="is_published"
+                className="peer sr-only"
+              />
+              <span className="w-5 h-5 border border-gray-300 rounded-sm bg-white peer-checked:bg-green-500"></span>
+            </label>
           </div>
         </div>
       )}
